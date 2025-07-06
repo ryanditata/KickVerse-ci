@@ -29,6 +29,26 @@
         <?php
         }
         ?>
+
+        <li class="nav-item">
+            <a class="nav-link <?php echo (uri_string() == 'profile') ? "" : "collapsed" ?>" href="profile">
+                <i class="bi bi-person"></i>
+                <span>Profile</span>
+            </a>
+        </li><!-- End Profile Nav -->
+
+        <?php
+        if (session()->get('role') == 'guest') {
+        ?>
+            <li class="nav-item">
+                <a class="nav-link <?php echo (uri_string() == 'produk') ? "" : "collapsed" ?>" href="penjualan">
+                    <i class="bi-wallet"></i>
+                    <span>Penjualan</span>
+                </a>
+            </li><!-- End Penjualan Nav -->
+        <?php
+        }
+        ?>
     </ul>
 
 </aside><!-- End Sidebar-->
