@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+date_default_timezone_set('Asia/Jakarta');
+
 use App\Models\ProductModel;
 use Dompdf\Dompdf;
 use Dompdf\Options;
