@@ -1,6 +1,22 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('content') ?>
 
+<style>
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-text-fill-color: #000 !important;
+}
+
+.form-control:focus {
+  border-color: #000000;
+  box-shadow: 0 0 0 0.15rem rgba(0, 0, 0, 0.15);
+}
+</style>
+
 <?php if (session()->getFlashdata('success')) : ?>
     <div class="alert alert-success alert-dismissible fade show mt-3 shadow-sm rounded" role="alert">
         <i class="bi bi-check-circle-fill me-2"></i>

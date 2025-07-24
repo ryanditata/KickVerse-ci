@@ -53,7 +53,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body px-4 py-4">
-                <p class="text-muted">Alamat<br><?= $item['alamat'] ?></p>
+                <p class="text-muted">Alamat<br><?= $item['username'],' ',$item['phone']?><br><?= $item['alamat']?></p>
                 <p class="text-muted">Tanggal: <?= $item['created_at'] ?></p>
                 <!-- Daftar Produk -->
                 <?php

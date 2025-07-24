@@ -34,7 +34,7 @@
         if (session()->get('role') == 'guest') {
         ?>
             <li class="nav-item">
-                <a class="nav-link <?php echo (uri_string() == 'produk') ? "" : "collapsed" ?>" href="penjualan">
+                <a class="nav-link <?php echo (uri_string() == 'penjualan') ? "" : "collapsed" ?>" href="penjualan">
                     <i class="bi bi-credit-card-2-back"></i>
                     <span>Penjualan</span>
                 </a>

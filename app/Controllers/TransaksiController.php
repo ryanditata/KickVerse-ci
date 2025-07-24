@@ -6,6 +6,8 @@ date_default_timezone_set('Asia/Jakarta');
 
 use App\Models\TransactionModel;
 use App\Models\TransactionDetailModel;
+use Midtrans\Config as MidtransConfig;
+use Midtrans\Snap;
 
 class TransaksiController extends BaseController
 {
@@ -17,8 +19,7 @@ class TransaksiController extends BaseController
 
     function __construct()
     {
-        helper('number');
-        helper('form');
+        helper(['number', 'form']);
         $this->cart = \Config\Services::cart();
         $this->client = new \GuzzleHttp\Client();
         $this->apiKey = env('COST_KEY');
@@ -35,21 +36,21 @@ class TransaksiController extends BaseController
 
     public function cart_add()
     {
-        $this->cart->insert(array(
-            'id'        => $this->request->getPost('id'),
-            'qty'       => 1,
-            'price'     => $this->request->getPost('harga'),
-            'name'      => $this->request->getPost('nama'),
-            'options'   => array('foto' => $this->request->getPost('foto'))
-        ));
-        session()->setFlashdata('success','Produk berhasil ditambahkan ke keranjang. (<a href="' . base_url('keranjang') . '">Lihat</a>)');
+        $this->cart->insert([
+            'id'      => $this->request->getPost('id'),
+            'qty'     => 1,
+            'price'   => $this->request->getPost('harga'),
+            'name'    => $this->request->getPost('nama'),
+            'options' => ['foto' => $this->request->getPost('foto')]
+        ]);
+        session()->setFlashdata('success','Produk berhasil ditambahkan ke keranjang.');
         return redirect()->to(base_url('/'));
     }
 
     public function cart_clear()
     {
         $this->cart->destroy();
-        session()->setflashdata('success', 'Keranjang Berhasil Dikosongkan');
+        session()->setFlashdata('success', 'Keranjang dikosongkan');
         return redirect()->to(base_url('keranjang'));
     }
 
@@ -57,123 +58,158 @@ class TransaksiController extends BaseController
     {
         $i = 1;
         foreach ($this->cart->contents() as $value) {
-            $this->cart->update(array(
+            $this->cart->update([
                 'rowid' => $value['rowid'],
                 'qty'   => $this->request->getPost('qty' . $i++)
-            ));
+            ]);
         }
-
-        session()->setflashdata('success', 'Keranjang Berhasil Diedit');
+        session()->setFlashdata('success', 'Keranjang diperbarui');
         return redirect()->to(base_url('keranjang'));
     }
 
     public function cart_delete($rowid)
     {
         $this->cart->remove($rowid);
-        session()->setflashdata('success', 'Keranjang Berhasil Dihapus');
+        session()->setFlashdata('success', 'Produk dihapus dari keranjang');
         return redirect()->to(base_url('keranjang'));
     }
 
     public function checkout()
     {
-    $data['items'] = $this->cart->contents();
-    $data['total'] = $this->cart->total();
-
-    return view('v_checkout', $data);
+        $data['items'] = $this->cart->contents();
+        $data['total'] = $this->cart->total();
+        return view('v_checkout', $data);
     }
 
     public function getLocation()
     {
-	//keyword pencarian yang dikirimkan dari halaman checkout
-    $search = $this->request->getGet('search');
+        $search = $this->request->getGet('search');
 
-    $response = $this->client->request(
-        'GET', 
-        'https://rajaongkir.komerce.id/api/v1/destination/domestic-destination?search='.$search.'&limit=50', [
+        $response = $this->client->request('GET', 
+            'https://rajaongkir.komerce.id/api/v1/destination/domestic-destination?search=' . $search . '&limit=50', [
             'headers' => [
                 'accept' => 'application/json',
-                'key' => $this->apiKey,
+                'key'    => $this->apiKey,
             ],
-        ]
-    );
+        ]);
 
-    $body = json_decode($response->getBody(), true); 
-    return $this->response->setJSON($body['data']);
+        $body = json_decode($response->getBody(), true); 
+        return $this->response->setJSON($body['data']);
     }
 
     public function getCost()
-    { 
-	//ID lokasi yang dikirimkan dari halaman checkout
-    $destination = $this->request->getGet('destination');
+    {
+        $destination = $this->request->getGet('destination');
 
-	//parameter daerah asal pengiriman, berat produk, dan kurir dibuat statis
-    //valuenya => 64999 : PEDURUNGAN TENGAH , 1000 gram, dan JNE
-    $response = $this->client->request(
-        'POST', 
-        'https://rajaongkir.komerce.id/api/v1/calculate/domestic-cost', [
+        $response = $this->client->request('POST',
+            'https://rajaongkir.komerce.id/api/v1/calculate/domestic-cost', [
             'multipart' => [
-                [
-                    'name' => 'origin',
-                    'contents' => '64999'
-                ],
-                [
-                    'name' => 'destination',
-                    'contents' => $destination
-                ],
-                [
-                    'name' => 'weight',
-                    'contents' => '1000'
-                ],
-                [
-                    'name' => 'courier',
-                    'contents' => 'jne'
-                ]
+                ['name' => 'origin', 'contents' => '64999'],
+                ['name' => 'destination', 'contents' => $destination],
+                ['name' => 'weight', 'contents' => '1000'],
+                ['name' => 'courier', 'contents' => 'jne']
             ],
             'headers' => [
                 'accept' => 'application/json',
-                'key' => $this->apiKey,
+                'key'    => $this->apiKey,
             ],
-        ]
-    );
+        ]);
 
-    $body = json_decode($response->getBody(), true); 
-    return $this->response->setJSON($body['data']);
+        $body = json_decode($response->getBody(), true); 
+        return $this->response->setJSON($body['data']);
     }
 
     public function buy()
     {
-    if ($this->request->getPost()) { 
-        $dataForm = [
-            'username' => $this->request->getPost('username'),
-            'total_harga' => $this->request->getPost('total_harga'),
-            'alamat' => $this->request->getPost('alamat'),
-            'ongkir' => $this->request->getPost('ongkir'),
-            'status' => 0,
-            'created_at' => date("Y-m-d H:i:s"),
-            'updated_at' => date("Y-m-d H:i:s")
-        ];
+        if ($this->request->isAJAX()) {
+            // Konfigurasi Midtrans
+            MidtransConfig::$serverKey = env('MIDTRANS_SERVER_KEY');
+            MidtransConfig::$isProduction = false;
+            MidtransConfig::$isSanitized = true;
+            MidtransConfig::$is3ds = true;
 
-        $this->transaction->insert($dataForm);
+            // Ambil data dari frontend
+            $username = $this->request->getPost('username');
+            $email    = $this->request->getPost('email');
+            $phone    = $this->request->getPost('phone');
+            $alamat   = $this->request->getPost('alamat');
+            $ongkir   = (int) $this->request->getPost('ongkir');
+            $total    = (int) $this->request->getPost('total_harga');
 
-        $last_insert_id = $this->transaction->getInsertID();
-
-        foreach ($this->cart->contents() as $value) {
-            $dataFormDetail = [
-                'transaction_id' => $last_insert_id,
-                'product_id' => $value['id'],
-                'jumlah' => $value['qty'],
-                'diskon' => 0,
-                'subtotal_harga' => $value['qty'] * $value['price'],
+            // Simpan transaksi
+            $dataForm = [
+                'username' => $username,
+                'phone' => $phone,
+                'total_harga' => $total,
+                'alamat' => $alamat,
+                'ongkir' => $ongkir,
+                'status' => 0,
                 'created_at' => date("Y-m-d H:i:s"),
                 'updated_at' => date("Y-m-d H:i:s")
             ];
 
-            $this->transaction_detail->insert($dataFormDetail);
-        }
+            $this->transaction->insert($dataForm);
+            $order_id = $this->transaction->getInsertID();
 
-        $this->cart->destroy();
- 
-        return redirect()->to(base_url());
-    }
+            $items = [];
+
+            foreach ($this->cart->contents() as $item) {
+                $this->transaction_detail->insert([
+                    'transaction_id' => $order_id,
+                    'product_id'     => $item['id'],
+                    'jumlah'         => $item['qty'],
+                    'diskon'         => 0,
+                    'subtotal_harga' => $item['qty'] * $item['price'],
+                    'created_at'     => date("Y-m-d H:i:s"),
+                    'updated_at'     => date("Y-m-d H:i:s")
+                ]);
+
+                $items[] = [
+                    'id' => $item['id'],
+                    'price' => $item['price'],
+                    'quantity' => $item['qty'],
+                    'name' => $item['name']
+                ];
+            }
+
+            // Tambahkan biaya ongkir sebagai item terpisah
+            $items[] = [
+                'id' => 'ONG-' . $order_id,
+                'price' => $ongkir,
+                'quantity' => 1,
+                'name' => 'Ongkos Kirim'
+            ];
+
+            $params = [
+                'transaction_details' => [
+                    'order_id' => 'KV-' . $order_id,
+                    'gross_amount' => $total
+                ],
+                'customer_details' => [
+                    'first_name' => $username,
+                    'email'      => $email,
+                    'phone'      => $phone,
+                    'billing_address' => [
+                        'first_name' => $username,
+                        'email'      => $email,
+                        'phone'      => $phone,
+                        'address'    => $alamat,
+                ],
+                'shipping_address' => [
+                    'first_name' => $username,
+                    'email'      => $email,
+                    'phone'      => $phone,
+                    'address'    => $alamat,
+                ]
+            ],
+            'item_details' => $items
+            ];
+
+            $snapToken = Snap::getSnapToken($params);
+
+            $this->cart->destroy();
+
+            return $this->response->setJSON(['snap_token' => $snapToken]);
+        }
     }
 }

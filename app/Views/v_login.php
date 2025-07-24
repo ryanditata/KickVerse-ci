@@ -13,7 +13,7 @@ input:-webkit-autofill:active {
 
 .form-control:focus {
   border-color: #000000;
-  box-shadow: 0 0 0 0.25rem rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 0 0.15rem rgba(0, 0, 0, 0.15);
 }
 </style>
 
@@ -66,7 +66,7 @@ $password = [
             
             <?= form_open('login', 'class = "row g-3 needs-validation"') ?>
                 <div class="col-12">
-                    <label for="yourUsername" class="form-label">Username</label>
+                    <label for="yourUsername" class="form-label">Username atau Email</label>
                     <div class="input-group has-validation">
                         <span class="input-group-text" id="inputGroupPrepend">@</span>
                         <?= form_input($username) ?>
