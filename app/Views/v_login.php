@@ -5,15 +5,18 @@
 
 <?php
 $username = [
-    'name' => 'username',
-    'id' => 'username',
-    'class' => 'form-control'
+    'name'  => 'username',
+    'id'    => 'username',
+    'class' => 'form-control' . (session('errors.username') ? ' is-invalid' : ''),
+    'value' => old('username'),
+    'placeholder' => 'Username atau Email'
 ];
 
 $password = [
-    'name' => 'password',
-    'id' => 'password',
-    'class' => 'form-control'
+    'name'  => 'password',
+    'id'    => 'password',
+    'class' => 'form-control' . (session('errors.password') ? ' is-invalid' : ''),
+    'placeholder' => 'Password'
 ];
 ?>
 
@@ -24,8 +27,8 @@ $password = [
 
         <!-- Logo -->
         <div class="d-flex justify-content-center py-4">
-          <a href="index.html" class="logo d-flex align-items-center w-auto">
-            <img src="<?php echo base_url() ?>NiceAdmin/assets/img/logo.png" alt="Kickverse">
+          <a href="<?= base_url('/') ?>" class="logo d-flex align-items-center w-auto">
+            <img src="<?= base_url('NiceAdmin/assets/img/logo.png') ?>" alt="Kickverse">
           </a>
         </div>
         <!-- End Logo -->
@@ -37,50 +40,42 @@ $password = [
               <p class="text-center small">Enter your username & password to login</p>
             </div>
 
-            <?php
-            if (session()->getFlashData('failed')) {
-            ?>
-                <div class="col-12 alert alert-danger" role="alert">
-                    <hr>
-                    <p class="mb-0">
-                        <?= session()->getFlashData('failed') ?>
-                    </p>
+            <!-- Login Form -->
+            <?= form_open('login', ['class' => 'row g-3 needs-validation', 'novalidate' => true]) ?>
+              
+              <div class="col-12">
+                <label for="username" class="form-label">Username atau Email</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text" id="inputGroupPrepend">@</span>
+                  <?= form_input($username) ?>
+                  <?php if (session('errors.username')): ?>
+                    <div class="invalid-feedback"><?= session('errors.username') ?></div>
+                  <?php endif; ?>
                 </div>
-            <?php
-            }
-            ?>
-            
-            <?= form_open('login', 'class = "row g-3 needs-validation"') ?>
-                <div class="col-12">
-                    <label for="yourUsername" class="form-label">Username atau Email</label>
-                    <div class="input-group has-validation">
-                        <span class="input-group-text" id="inputGroupPrepend">@</span>
-                        <?= form_input($username) ?>
-                        <div class="invalid-feedback">Please enter your username.</div>
-                    </div>
-                </div>
+              </div>
 
-                <div class="col-12">
-                    <label for="yourPassword" class="form-label">Password</label>
-                            <?= form_password($password) ?>
-                    <div class="invalid-feedback">Please enter your password!</div>
-                </div>
-                <div class="col-12">
-                    <?= form_submit('submit', 'Login', ['class' => 'btn btn-dark w-100 fw-semibold rounded-pill mt-3']) ?>
-                </div>
+              <div class="col-12">
+                <label for="password" class="form-label">Password</label>
+                <?= form_password($password) ?>
+                <?php if (session('errors.password')): ?>
+                  <div class="invalid-feedback"><?= session('errors.password') ?></div>
+                <?php endif; ?>
+              </div>
+              
+              <div class="col-12">
+                <?= form_submit('submit', 'Login', ['class' => 'btn btn-dark w-100 fw-semibold rounded-pill mt-3']) ?>
+              </div>
+
+              <p class="text-center mt-3">
+                Belum punya akun? <a href="<?= base_url('register') ?>" class="text-black">Daftar Sekarang</a>
+              </p>
 
             <?= form_close() ?>
           </div>
         </div>
-        
-        <div class="credits">
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-            <div class="credits text-center mt-2 text-muted small">
-              &copy; <?= date('Y') ?> Kickverse Login
-            </div>
+
+        <div class="credits text-center mt-2 text-muted small">
+          &copy; <?= date('Y') ?> Kickverse Login
         </div>
       </div>
     </div>

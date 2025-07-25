@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+date_default_timezone_set('Asia/Jakarta');
+
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;

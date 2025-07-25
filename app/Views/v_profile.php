@@ -114,7 +114,7 @@
       <?php endforeach; ?>
     </div>
   <?php else : ?>
-    <div class="alert alert-info text-center">
+    <div class="text-center">
       Belum ada transaksi.
     </div>
   <?php endif; ?>

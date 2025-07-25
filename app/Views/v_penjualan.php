@@ -1,6 +1,6 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('content') ?>
 
-Sedang Tahap Development
+Sedang tahap development.
 
 <?= $this->endSection() ?>
