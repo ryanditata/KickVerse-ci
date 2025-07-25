@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 date_default_timezone_set('Asia/Jakarta');
 
+use App\Models\ProductModel;
 use App\Models\TransactionModel;
 use App\Models\TransactionDetailModel;
 use Midtrans\Config as MidtransConfig;
@@ -16,6 +17,7 @@ class TransaksiController extends BaseController
     protected $apiKey;
     protected $transaction;
     protected $transaction_detail;
+    protected $product;
 
     function __construct()
     {
@@ -25,6 +27,7 @@ class TransaksiController extends BaseController
         $this->apiKey = env('COST_KEY');
         $this->transaction = new TransactionModel();
         $this->transaction_detail = new TransactionDetailModel();
+        $this->product = new ProductModel();
     }
 
     public function index()
@@ -50,7 +53,7 @@ class TransaksiController extends BaseController
     public function cart_clear()
     {
         $this->cart->destroy();
-        session()->setFlashdata('success', 'Keranjang dikosongkan');
+        session()->setFlashdata('success', 'Keranjang dikosongkan.');
         return redirect()->to(base_url('keranjang'));
     }
 
@@ -63,20 +66,37 @@ class TransaksiController extends BaseController
                 'qty'   => $this->request->getPost('qty' . $i++)
             ]);
         }
-        session()->setFlashdata('success', 'Keranjang diperbarui');
+        session()->setFlashdata('success', 'Keranjang diperbarui.');
         return redirect()->to(base_url('keranjang'));
     }
 
     public function cart_delete($rowid)
     {
         $this->cart->remove($rowid);
-        session()->setFlashdata('success', 'Produk dihapus dari keranjang');
+        session()->setFlashdata('success', 'Produk dihapus dari keranjang.');
         return redirect()->to(base_url('keranjang'));
     }
 
     public function checkout()
     {
-        $data['items'] = $this->cart->contents();
+        $items = $this->cart->contents();
+        $errors = [];
+
+        foreach ($items as $item) {
+            $product = $this->product->find($item['id']);
+            if ($item['qty'] > $product['jumlah']) {
+                $errors[] = "Stok produk <strong>{$product['nama']}</strong> hanya tersedia <strong>{$product['jumlah']}</strong>.";
+            }
+        }
+
+        if (!empty($errors)) {
+            session()->setFlashdata('error', implode('<br>', $errors));
+            return redirect()->to(base_url('keranjang'));
+        }
+
+        session()->setFlashdata('success', 'Silakan lanjut ke pembayaran.');
+    
+        $data['items'] = $items;
         $data['total'] = $this->cart->total();
         return view('v_checkout', $data);
     }
@@ -163,6 +183,15 @@ class TransaksiController extends BaseController
                     'created_at'     => date("Y-m-d H:i:s"),
                     'updated_at'     => date("Y-m-d H:i:s")
                 ]);
+
+                $produk = $this->product->find($item['id']);
+                if ($produk) {
+                    $jumlahBaru = $produk['jumlah'] - $item['qty'];
+                    if ($jumlahBaru < 0) {
+                        $jumlahBaru = 0;
+                    }
+                    $this->product->update($item['id'], ['jumlah' => $jumlahBaru]);
+                }
 
                 $items[] = [
                     'id' => $item['id'],

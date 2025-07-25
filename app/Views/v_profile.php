@@ -6,6 +6,11 @@
 
   <?php if (!empty($buy)) : ?>
     <div class="row row-cols-1 g-1">
+      <?php
+      usort($buy, function ($a, $b) {
+        return strtotime($b['created_at']) - strtotime($a['created_at']);
+      });
+      ?>
       <?php foreach ($buy as $index => $item) : ?>
         <div class="col">
           <div class="card shadow-sm border-0">

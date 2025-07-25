@@ -45,7 +45,7 @@ class ProdukController extends BaseController
 
     $this->product->insert($dataForm);
 
-    return redirect('produk')->with('success', 'Data Berhasil Ditambah');
+    return redirect('produk')->with('success', 'Data Berhasil Ditambah.');
     }
     
     // Fungsi edit
@@ -76,7 +76,7 @@ class ProdukController extends BaseController
 
     $this->product->update($id, $dataForm);
 
-    return redirect('produk')->with('success', 'Data Berhasil Diubah');
+    return redirect('produk')->with('success', 'Data Berhasil Diubah.');
     }
 
     // Fungsi hapus
@@ -90,7 +90,7 @@ class ProdukController extends BaseController
 
     $this->product->delete($id);
 
-    return redirect('produk')->with('success', 'Data Berhasil Dihapus');
+    return redirect('produk')->with('success', 'Data Berhasil Dihapus.');
     }
 
     // Fungsi download

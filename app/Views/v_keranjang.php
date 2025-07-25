@@ -10,6 +10,13 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 <?php endif; ?>
+<?php if (session()->getFlashdata('error')) : ?>
+    <div class="alert alert-danger alert-dismissible fade show shadow-sm rounded mt-3" role="alert">
+        <i class="bi bi-x-circle-fill me-2"></i>
+        <?= session()->getFlashdata('error') ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
 
 <?php echo form_open('keranjang/edit') ?>
 

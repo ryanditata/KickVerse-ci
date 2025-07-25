@@ -189,6 +189,11 @@
 <!-- Product Grid -->
 <div class="container py-2" id="produk">
     <div class="row g-4">
+        <?php
+        usort($product, function ($a, $b) {
+            return $b['id'] <=> $a['id'];
+        });
+        ?>
         <?php foreach ($product as $key => $item) : ?>
             <div class="col-md-6 col-lg-4">
                 <?= form_open('keranjang') ?>
@@ -202,6 +207,7 @@
                 <div class="card-body">
                   <p class="fw-semibold text-black fs-5 mt-4" style="margin: 0;"><?= $item['nama'] ?></p>
                   <p class="fw-normal text-secondary" style="margin: 0;">Men's Shoe</p>
+                  <p class="fw-normal text-secondary" style="margin: 0;">Stok <?= $item['jumlah'] ?></p>
                   <p class="fw-semibold text-black mt-2" style="margin: 0;">IDR <?= number_format($item['harga'], 0, ',', '.') ?></p>
                   <div class="d-flex mt-4">
                   <button type="submit" class="btn btn-outline-dark w-100 rounded-pill fw-semibold">Beli</button>

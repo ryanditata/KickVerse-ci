@@ -3,10 +3,9 @@
 
 <link href="<?= base_url('NiceAdmin/assets/css/custom.css') ?>" rel="stylesheet">
 
-<!-- Flash Message -->
 <?php if (session()->getFlashdata('success')) : ?>
-    <div class="alert alert-info alert-dismissible fade show shadow-sm rounded mt-3" role="alert">
-        <i class="bi bi-info-circle-fill me-2"></i>
+    <div class="alert alert-success alert-dismissible fade show mt-3 shadow-sm rounded" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i>
         <?= session()->getFlashdata('success') ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -34,6 +33,11 @@
 <!-- Product Grid -->
 <div class="container mt-2 mb-4">
     <div class="row row-cols-1 row-cols-md-3 g-4">
+        <?php
+        usort($product, function ($a, $b) {
+            return $b['id'] <=> $a['id'];
+        });
+        ?>
         <?php foreach ($product as $produk) : ?>
             <div class="col">
                 <div class="card">
