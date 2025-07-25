@@ -1,6 +1,6 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('content') ?>
 
-Ini Adalah Halaman Penjualan
+Sedang Tahap Development
 
 <?= $this->endSection() ?>

@@ -1,5 +1,7 @@
 <?= $this->extend('layout') ?>
-<?= $this->section('content') ?> 
+<?= $this->section('content') ?>
+
+<link href="<?= base_url('NiceAdmin/assets/css/custom.css') ?>" rel="stylesheet">
 
 <!-- Flash Message -->
 <?php if (session()->getFlashdata('success')) : ?>
@@ -176,17 +178,5 @@
         </div>
     </div>
 </div>
-
-<!-- Optional Custom CSS -->
-<style>
-.card-title {
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-.card-img-top {
-    object-fit: cover;
-    height: 250px;
-}
-</style>
 
 <?= $this->endSection() ?>

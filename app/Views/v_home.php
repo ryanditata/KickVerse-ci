@@ -1,6 +1,8 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('content') ?>
 
+<link href="<?= base_url('NiceAdmin/assets/css/custom.css') ?>" rel="stylesheet">
+
 <?php if (session()->getFlashdata('success')) : ?>
     <div class="alert alert-success alert-dismissible fade show mt-3 shadow-sm rounded" role="alert">
         <i class="bi bi-check-circle-fill me-2"></i>
@@ -213,30 +215,5 @@
     </div>
 </div>
 <!-- End Product Grid -->
-
-<style>
-  .scroll-container {
-    height: 180px;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .scroll-content {
-    display: flex;
-    flex-direction: column;
-    animation: scrollUp 15s linear infinite;
-  }
-
-  @keyframes scrollUp {
-    0% { transform: translateY(0); }
-    100% { transform: translateY(-50%); }
-  }
-
-  .category-img {
-    max-height: 100px;
-    object-fit: contain;
-    margin-bottom: 10px;
-  }
-</style>
 
 <?= $this->endSection() ?>

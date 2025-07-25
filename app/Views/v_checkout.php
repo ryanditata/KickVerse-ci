@@ -1,34 +1,7 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('content') ?>
 
-<style>
-input:-webkit-autofill,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:active {
-  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
-  box-shadow: 0 0 0px 1000px white inset !important;
-  -webkit-text-fill-color: #000 !important;
-}
-
-.form-control:focus {
-  border-color: #000000;
-  box-shadow: 0 0 0 0.15rem rgba(0, 0, 0, 0.15);
-}
-
-.select2-container .select2-selection--single {
-    height: 36px !important;
-    padding: 5px 4px !important;
-}
-
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    line-height: 24px !important;
-}
-
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-    height: 35px !important;
-}
-</style>
+<link href="<?= base_url('NiceAdmin/assets/css/custom.css') ?>" rel="stylesheet">
 
 <div class="container py-2 mt-4 mb-4">
     <div class="row">
@@ -53,7 +26,7 @@ input:-webkit-autofill:active {
                 </div>
 
                 <div class="mb-3">
-                    <label for="email" class="form-label">No HP</label>
+                    <label for="email" class="form-label">Nomor HP</label>
                     <input type="text" class="form-control" value="<?= esc(session()->get('phone')) ?>" readonly>
                 </div>
 

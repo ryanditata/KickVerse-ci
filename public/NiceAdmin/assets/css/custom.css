@@ -1,0 +1,71 @@
+/* public/assets/css/custom.css */
+
+/*--------------------------------------------------------------
+# Home
+--------------------------------------------------------------*/
+.scroll-container {
+  height: 180px;
+  overflow: hidden;
+  position: relative;
+}
+
+.scroll-content {
+  display: flex;
+  flex-direction: column;
+  animation: scrollUp 15s linear infinite;
+}
+
+@keyframes scrollUp {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.category-img {
+  max-height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+
+/*--------------------------------------------------------------
+# Login, Keranjang, Checkout
+--------------------------------------------------------------*/
+input:-webkit-autofill,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-text-fill-color: #000 !important;
+}
+
+.form-control:focus {
+  border-color: #000000;
+  box-shadow: 0 0 0 0.15rem rgba(0, 0, 0, 0.15);
+}
+
+.select2-container .select2-selection--single {
+    height: 36px !important;
+    padding: 5px 4px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 24px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 35px !important;
+}
+
+
+/*--------------------------------------------------------------
+# Produk
+--------------------------------------------------------------*/
+.card-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+.card-img-top {
+    object-fit: cover;
+    height: 250px;
+}
