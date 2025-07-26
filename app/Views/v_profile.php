@@ -39,8 +39,8 @@
                   </span>
                 </div>
                 <p class="text-muted mb-1">Tanggal: <?= $item['created_at'] ?></p>
-                <p class="text-muted mb-1">Total Pesanan: <strong>IDR <?= number_format($item['total_harga'], 0, ',', '.')?></strong></p>
-                <p class="text-muted">Alamat: <?= $item['alamat'] ?></p>
+                <p class="text-black mb-1">Total Pesanan: <strong>IDR <?= number_format($item['total_harga'], 0, ',', '.')?></strong></p>
+                <p class="text-black">Alamat: <?= $item['alamat'] ?></p>
                 <button type="button" class="btn btn-dark btn-sm rounded-pill fw-semibold" data-bs-toggle="modal" data-bs-target="#detailModal-<?= $item['id'] ?>">
                   Detail
                 </button>
@@ -58,7 +58,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body px-4 py-4">
-                <p class="text-muted">Alamat<br><?= $item['username'],' | ',$item['phone']?><br><?= $item['alamat']?></p>
+                <p class="text-black">Alamat<br><?= $item['username'],' | ',$item['phone']?><br><?= $item['alamat']?></p>
                 <p class="text-muted">Tanggal: <?= $item['created_at'] ?></p>
                 <!-- Daftar Produk -->
                 <?php
